@@ -13,7 +13,10 @@ const nextConfig: NextConfig = {
     // - prod:    https://<render-app>.onrender.com/api
     const envApi = process.env.NEXT_PUBLIC_API_URL;
     if (!envApi) {
-      throw new Error("NEXT_PUBLIC_API_URL must be set (e.g. http://127.0.0.1:5000/api for dev, https://<render>/api for prod).");
+      console.warn(
+        "NEXT_PUBLIC_API_URL is not set, so /backend rewrites are disabled for this build."
+      );
+      return [];
     }
     const backendOrigin = envApi.replace(/\/api\/?$/i, "");
 

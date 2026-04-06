@@ -1,17 +1,9 @@
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { AuthProvider } from "@/context/AuthContext";
 import { SocketProvider } from "@/context/SocketContext";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import ToastProvider from "@/components/ToastProvider";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  weight: ["300", "400", "500", "600", "700", "800", "900"],
-  display: "swap",
-});
 
 const SITE_TITLE = "SmartQueue - Smart Queue Management System";
 const SITE_DESCRIPTION =
@@ -33,7 +25,6 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={inter.variable}
       suppressHydrationWarning
       data-scroll-behavior="smooth"
     >
