@@ -195,7 +195,7 @@ Frontend runs at: `http://localhost:3000`
 
 | Role | Email | Password |
 |------|-------|----------|
-| **Admin** | admin@smartqueue.com | password123 |
+
 | **User** | john@example.com | password123 |
 
 ---
