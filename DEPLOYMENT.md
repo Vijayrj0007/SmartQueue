@@ -20,7 +20,7 @@ That error usually means Vercel did **not** run a valid Next.js build for this a
    | Name | Example value |
    |------|----------------|
    | `NEXT_PUBLIC_API_URL` | `https://your-backend.onrender.com/api` |
-   | `NEXT_PUBLIC_SOCKET_URL` | `https://your-backend.onrender.com` |
+   | `NEXT_PUBLIC_SOCKET_URL` | *(optional)* `https://your-backend.onrender.com` — if omitted, the app derives the Socket.io URL from `NEXT_PUBLIC_API_URL` (same host, no `/api`). |
 
 3. Trigger a **new deployment** after changing env vars.
 

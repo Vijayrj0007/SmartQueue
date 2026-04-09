@@ -10,11 +10,34 @@ import { useToast } from '@/components/ToastProvider';
 export default function ContactPage() {
   const { showToast } = useToast();
   const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    showToast('Message sent successfully! We\'ll get back to you soon.', 'success');
-    setFormData({ name: '', email: '', subject: '', message: '' });
+    setIsSubmitting(true);
+
+    try {
+      // Use the generic /api endpoint routing strategy seen elsewhere
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api';
+      const response = await fetch(`${apiUrl}/contact`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || 'Failed to submit query. Please try again later.');
+      }
+
+      showToast('Message sent successfully! We\'ll get back to you soon.', 'success');
+      setFormData({ name: '', email: '', subject: '', message: '' });
+    } catch (error: any) {
+      showToast(error.message, 'error');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -83,8 +106,12 @@ export default function ContactPage() {
                   <label className="label">Message</label>
                   <textarea value={formData.message} onChange={e => setFormData(d => ({ ...d, message: e.target.value }))} className="input min-h-[120px]" placeholder="Your message..." required />
                 </div>
-                <button type="submit" className="btn-primary w-full justify-center">
-                  <Send size={16} /> Send Message
+                <button type="submit" disabled={isSubmitting} className="btn-primary w-full justify-center disabled:opacity-70">
+                  {isSubmitting ? (
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                  ) : (
+                    <><Send size={16} /> Send Message</>
+                  )}
                 </button>
               </form>
             </div>

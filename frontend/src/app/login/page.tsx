@@ -205,22 +205,7 @@ function LoginContent() {
           </form>
 
           {/* Demo credentials */}
-          <div className="mt-6 p-4 bg-indigo-50 rounded-2xl border border-indigo-100">
-            <div className="flex items-center gap-2 mb-2">
-              <Sparkles size={13} className="text-[var(--primary)]" />
-              <p className="text-xs font-bold text-[var(--primary)] uppercase tracking-wide">Demo Credentials</p>
-            </div>
-            <div className="grid grid-cols-1 gap-1.5">
-              <div className="flex items-center justify-between text-xs">
-                <span className="font-semibold text-[var(--text-secondary)]">Admin:</span>
-                <span className="text-[var(--text-muted)] font-mono">admin@smartqueue.com / password123</span>
-              </div>
-              <div className="flex items-center justify-between text-xs">
-                <span className="font-semibold text-[var(--text-secondary)]">User:</span>
-                <span className="text-[var(--text-muted)] font-mono">john@example.com / password123</span>
-              </div>
-            </div>
-          </div>
+         
 
           <p className="text-center mt-6 text-sm text-[var(--text-secondary)]">
             New to SmartQueue?{' '}

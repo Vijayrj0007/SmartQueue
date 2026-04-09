@@ -158,7 +158,7 @@ export default function RegisterPage() {
                   onChange={handleChange}
                   onFocus={() => setFocusedField('name')}
                   onBlur={() => setFocusedField(null)}
-                  className="input !pl-11" placeholder="John Doe" required
+                  className="input !pl-11" placeholder="Vijay Kumar" required
                   id="register-name"
                 />
               </div>

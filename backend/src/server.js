@@ -24,6 +24,7 @@ const publicTokenRoutes = require('./routes/publicToken.routes');
 const analyticsRoutes = require('./routes/analytics.routes');
 const notificationRoutes = require('./routes/notification.routes');
 const adminRoutes = require('./routes/admin.routes');
+const contactRoutes = require('./routes/contact.routes');
 const { initializeSocket } = require('./socket/index');
 
 const app = express();
@@ -109,6 +110,7 @@ app.use('/api/public', apiLimiter, publicTokenRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/notifications', notificationRoutes);
 app.use('/api/admin', adminRoutes);
+app.use('/api/contact', contactRoutes);
 
 app.use((req, res) => {
   res.status(404).json({

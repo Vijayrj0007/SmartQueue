@@ -23,16 +23,31 @@ const SocketContext = createContext<SocketContextType>({
   leaveQueue: () => {},
 });
 
-function resolveSocketUrl() {
-  const envBase = process.env.NEXT_PUBLIC_SOCKET_URL;
-  const baseFromEnv = envBase;
+/** Same host as the API, without `/api` (Socket.io is on the backend origin, not under /api). */
+function deriveSocketUrlFromApiUrl(): string | undefined {
+  const api = process.env.NEXT_PUBLIC_API_URL?.trim();
+  if (!api) return undefined;
+  return api.replace(/\/api\/?$/i, '');
+}
 
-  // During SSR, avoid reading `window` (prevents server/client rendering mismatches).
-  if (typeof window === 'undefined') return baseFromEnv as string | undefined;
+/**
+ * Resolve Socket.io base URL. Prefer NEXT_PUBLIC_SOCKET_URL; otherwise derive from NEXT_PUBLIC_API_URL
+ * so Vercel only needs one backend URL if the user forgets SOCKET_URL.
+ */
+function resolveSocketUrl(): string | undefined {
+  const explicit = process.env.NEXT_PUBLIC_SOCKET_URL?.trim();
+  const base = explicit || deriveSocketUrlFromApiUrl();
 
-  if (!baseFromEnv) {
-    // Fail fast: Socket.io server must be configured (dev + prod).
-    throw new Error('NEXT_PUBLIC_SOCKET_URL must be set (e.g. http://127.0.0.1:5000 for dev, https://<render> for prod).');
+  // During SSR, avoid reading `window`.
+  if (typeof window === 'undefined') return base;
+
+  if (!base) {
+    if (process.env.NODE_ENV === 'development') {
+      console.warn(
+        '[Socket] Set NEXT_PUBLIC_API_URL (and optionally NEXT_PUBLIC_SOCKET_URL) for real-time updates.'
+      );
+    }
+    return undefined;
   }
 
   const host = window.location.hostname;
@@ -40,16 +55,15 @@ function resolveSocketUrl() {
     host === 'localhost' || host === '127.0.0.1' || host === '[::1]' || host === '0.0.0.0';
 
   const envLooksLikeLocalhost =
-    (baseFromEnv as string).includes('localhost:5000') ||
-    (baseFromEnv as string).includes('127.0.0.1:5000') ||
-    (baseFromEnv as string).includes('0.0.0.0:5000');
+    base.includes('localhost:5000') ||
+    base.includes('127.0.0.1:5000') ||
+    base.includes('0.0.0.0:5000');
 
-  // If the frontend is opened via LAN IP, but env points to localhost, swap to the LAN host.
   if (!isClientLocal && envLooksLikeLocalhost) {
     return `${window.location.protocol}//${window.location.hostname}:5000`;
   }
 
-  return baseFromEnv as string;
+  return base;
 }
 
 /** Request browser notification permission once on mount */
@@ -86,7 +100,11 @@ export function SocketProvider({ children }: { children: React.ReactNode }) {
     const token = typeof window !== 'undefined' ? localStorage.getItem('accessToken') : null;
 
     const socketUrl = resolveSocketUrl();
-    const newSocket = io(socketUrl || undefined, {
+    if (!socketUrl) {
+      return;
+    }
+
+    const newSocket = io(socketUrl, {
       auth: { token },
       transports: ['websocket', 'polling'],
       reconnection: true,

@@ -8,7 +8,7 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
-import { LayoutDashboard, MapPin, Radio, BarChart3, Settings, ArrowLeft } from 'lucide-react';
+import { LayoutDashboard, MapPin, Radio, BarChart3, Settings, ArrowLeft, MessageSquare } from 'lucide-react';
 
 export default function AdminLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -35,6 +35,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { href: '/admin/locations', icon: <MapPin size={20} />, label: 'Locations' },
     { href: '/admin/queues', icon: <Radio size={20} />, label: 'Queue Control' },
     { href: '/admin/analytics', icon: <BarChart3 size={20} />, label: 'Analytics' },
+    { href: '/admin/queries', icon: <MessageSquare size={20} />, label: 'Queries' },
   ];
 
   return (
