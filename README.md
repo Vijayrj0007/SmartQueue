@@ -10,12 +10,12 @@ A production-ready, full-stack digital queue management platform built with mode
 
 | Layer | Technology |
 |-------|-----------|
-| **Frontend** | Next.js 14 (App Router) + TailwindCSS |
-| **Backend** | Node.js + Express 4 |
-| **Database** | SQLite (via better-sqlite3) — zero config |
+| **Frontend** | Next.js 16 (App Router) + React 19 + TypeScript + Tailwind CSS v4 |
+| **Backend** | Node.js 18+ + Express 4.21 |
+| **Database** | PostgreSQL via pg |
 | **Auth** | JWT (Access + Refresh Tokens) |
-| **Realtime** | Socket.io |
-| **Notifications** | Web Push API |
+| **Realtime** | Socket.io 4|
+| **Notifications** | In-app notifications + Socket pre_call_notification + optional browser notifications |
 
 ---
 
